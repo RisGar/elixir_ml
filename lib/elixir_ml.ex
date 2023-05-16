@@ -6,6 +6,21 @@ defmodule ElixirML do
     end)
   end
 
+  def predict do
+  end
+
+  def get_weights(layers) do
+    layers
+    |> Enum.zip(Enum.drop(layers, 1))
+    |> Enum.map(&Utils.random_2d_array/1)
+  end
+
+  def get_biases(layers) do
+    layers
+    |> Enum.drop(1)
+    |> Enum.map(&Utils.random_1d_array/1)
+  end
+
   def train do
     layers = [2, 5, 2]
 
@@ -16,8 +31,10 @@ defmodule ElixirML do
       {[1, 1], [0, 1]}
     ]
 
-    layers
-    |> Enum.zip(Enum.drop(layers, 1))
-    |> Enum.map(&Tuple.product/1)
+    weights = get_weights(layers)
+    biases = get_biases(layers)
+
+    IO.inspect(weights)
+    IO.inspect(biases)
   end
 end
