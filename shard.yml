@@ -1,0 +1,13 @@
+name: crlearning
+version: 0.1.0
+
+authors:
+  - Rishab Garg <rishgarg@gmail.com>
+
+targets:
+  crlearning:
+    main: src/crlearning.cr
+
+crystal: 1.8.2
+
+license: EUPL-1.2
