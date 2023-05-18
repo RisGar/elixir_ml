@@ -9,16 +9,18 @@ defmodule ElixirML do
   def predict do
   end
 
+  @spec get_weights(nonempty_list(integer)) :: nonempty_list(nonempty_list(nonempty_list(float)))
   def get_weights(layers) do
     layers
     |> Enum.zip(Enum.drop(layers, 1))
-    |> Enum.map(&Utils.random_2d_array/1)
+    |> Enum.map(&Utils.random_matrix/1)
   end
 
+  @spec get_biases(nonempty_list(integer)) :: nonempty_list(nonempty_list(float))
   def get_biases(layers) do
     layers
     |> Enum.drop(1)
-    |> Enum.map(&Utils.random_1d_array/1)
+    |> Enum.map(&Utils.random_vector/1)
   end
 
   def train do
@@ -34,7 +36,6 @@ defmodule ElixirML do
     weights = get_weights(layers)
     biases = get_biases(layers)
 
-    IO.inspect(weights)
-    IO.inspect(biases)
+    {weights, biases}
   end
 end
