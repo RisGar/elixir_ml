@@ -9,9 +9,7 @@ defmodule Utils do
     sigmoid(x) * (1 - sigmoid(x))
   end
 
-  @doc """
-  Generates an `n` dimensional vector filled with random numbers in a standard normal distribution
-  """
+  @doc "Generates an `n` dimensional vector filled with random numbers in a standard normal distribution"
   @spec random_vector(pos_integer) :: nonempty_list(float)
   def random_vector(n) do
     for _ <- 1..n do
@@ -19,13 +17,22 @@ defmodule Utils do
     end
   end
 
-  @doc ~S"""
-  Generates an $m \times n$ sized matrix filled with random numbers in a standard normal distribution
-  """
+  @doc ~S"Generates an $m \times n$ sized matrix filled with random numbers in a standard normal distribution"
   @spec random_matrix({pos_integer, pos_integer}) :: nonempty_list(nonempty_list(float))
   def random_matrix({n, m}) do
     for _ <- 1..m do
       random_vector(n)
     end
   end
+
+  # https://rosettacode.org/wiki/Dot_product#Elixir
+  @spec dot_product([number], [number]) :: number
+  def dot_product(a, b) when length(a) == length(b), do: dot_product(a, b, 0)
+
+  def dot_product(_, _) do
+    raise ArgumentError, message: "Vectors must have the same length."
+  end
+
+  defp dot_product([], [], product), do: product
+  defp dot_product([h1 | t1], [h2 | t2], product), do: dot_product(t1, t2, product + h1 * h2)
 end

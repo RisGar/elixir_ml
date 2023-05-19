@@ -8,7 +8,13 @@ defmodule ElixirML.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+
+      # Docs
+      name: "ElixirML",
+      source_url: "https://github.com/RisGar/elixir_ml",
       docs: [
+        main: "ElixirML",
+        extras: ["README.md"],
         before_closing_body_tag: &before_closing_body_tag/1
       ]
     ]

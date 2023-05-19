@@ -23,19 +23,21 @@ defmodule ElixirML do
     |> Enum.map(&Utils.random_vector/1)
   end
 
-  def train do
-    layers = [2, 5, 2]
-
-    _training_data = [
-      {[0, 0], [1, 0]},
-      {[0, 1], [0, 1]},
-      {[1, 0], [0, 1]},
-      {[1, 1], [0, 1]}
-    ]
-
+  def build(layers, training_data) do
     weights = get_weights(layers)
     biases = get_biases(layers)
 
-    {weights, biases}
+    [inputs, targets] =
+      training_data
+      |> Enum.zip()
+      |> Enum.map(&Tuple.to_list/1)
+
+    %ElixirML.Network{
+      layers: layers,
+      weights: weights,
+      biases: biases,
+      inputs: inputs,
+      targets: targets
+    }
   end
 end
