@@ -2,11 +2,10 @@ defmodule Mix.Tasks.Xor do
   @moduledoc "Example XOR network"
 
   use Mix.Task
+  import ElixirML
 
   @impl Mix.Task
   def run(_args) do
-    layers = [2, 5, 2]
-
     training_data = [
       [[0, 0], [1, 0]],
       [[0, 1], [0, 1]],
@@ -14,7 +13,9 @@ defmodule Mix.Tasks.Xor do
       [[1, 1], [1, 0]]
     ]
 
-    model = ElixirML.build(layers, training_data)
-    IO.inspect(model)
+    ElixirML.input(training_data)
+    |> layer(5)
+    |> gen_network()
+    |> IO.inspect()
   end
 end

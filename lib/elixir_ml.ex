@@ -1,14 +1,4 @@
 defmodule ElixirML do
-  def cost(training_data) do
-    training_data
-    |> Enum.reduce(0, fn {x, y}, acc ->
-      nil
-    end)
-  end
-
-  def predict do
-  end
-
   @spec get_weights(nonempty_list(integer)) :: nonempty_list(nonempty_list(nonempty_list(float)))
   def get_weights(layers) do
     layers
@@ -23,21 +13,33 @@ defmodule ElixirML do
     |> Enum.map(&Utils.random_vector/1)
   end
 
-  def build(layers, training_data) do
-    weights = get_weights(layers)
-    biases = get_biases(layers)
-
+  def input(training_data) do
     [inputs, targets] =
       training_data
       |> Enum.zip()
       |> Enum.map(&Tuple.to_list/1)
 
     %ElixirML.Network{
-      layers: layers,
-      weights: weights,
-      biases: biases,
       inputs: inputs,
-      targets: targets
+      targets: targets,
+      size: [length(Enum.at(inputs, 0)), length(Enum.at(targets, 0))]
+    }
+  end
+
+  def layer(network, size) do
+    [head | tail] = network.size
+
+    %ElixirML.Network{
+      network
+      | size: [head | [size | tail]]
+    }
+  end
+
+  def gen_network(network) do
+    %ElixirML.Network{
+      network
+      | weights: get_weights(network.size),
+        biases: get_biases(network.size)
     }
   end
 end
