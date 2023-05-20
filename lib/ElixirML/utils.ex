@@ -1,4 +1,4 @@
-defmodule Utils do
+defmodule ElixirML.Utils do
   @spec sigmoid(number) :: float
   def sigmoid(x) do
     1 / (1 + :math.exp(-x))
@@ -25,7 +25,7 @@ defmodule Utils do
     end
   end
 
-  # https://rosettacode.org/wiki/Dot_product#Elixir
+  @doc "Computes the dot product of two vectors"
   @spec dot_product([number], [number]) :: number
   def dot_product(a, b) when length(a) == length(b), do: dot_product(a, b, 0)
 
@@ -35,4 +35,18 @@ defmodule Utils do
 
   defp dot_product([], [], product), do: product
   defp dot_product([h1 | t1], [h2 | t2], product), do: dot_product(t1, t2, product + h1 * h2)
+
+  @spec get_weights(nonempty_list(integer)) :: nonempty_list(nonempty_list(nonempty_list(float)))
+  def get_weights(layers) do
+    layers
+    |> Enum.zip(Enum.drop(layers, 1))
+    |> Enum.map(&random_matrix/1)
+  end
+
+  @spec get_biases(nonempty_list(integer)) :: nonempty_list(nonempty_list(float))
+  def get_biases(layers) do
+    layers
+    |> Enum.drop(1)
+    |> Enum.map(&random_vector/1)
+  end
 end
