@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Xor do
-  @moduledoc "Example XOR network"
+  @moduledoc "Example implementation of a network aiming to replicate a XOR gate"
+  @shortdoc "Simple XOR network"
 
   use Mix.Task
   import ElixirML
