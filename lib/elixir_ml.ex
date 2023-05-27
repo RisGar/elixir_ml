@@ -7,8 +7,6 @@ defmodule ElixirML do
     #   dot product with weights
     #   sum with bias
     #   sigmoid
-
-    Utils.matrix_dot_product(network.features |> Enum.at(0), network.weights |> Enum.at(0))
   end
 
   def cost(network) do

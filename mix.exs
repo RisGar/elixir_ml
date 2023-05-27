@@ -31,7 +31,7 @@ defmodule ElixirML.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:commitlint, "~> 0.1.2", runtime: false, only: :dev}
+      {:commitlint, "~> 0.1.2", only: :dev, runtime: false}
     ]
   end
 

@@ -44,24 +44,4 @@ defmodule ElixirML.Utils do
 
   defp dot_product([], [], product), do: product
   defp dot_product([h1 | t1], [h2 | t2], product), do: dot_product(t1, t2, product + h1 * h2)
-
-  def inspect_network(network) do
-    IO.puts("-----------------------")
-    IO.puts("layers  : #{Enum.join(network.size, ", ")}")
-    IO.puts("weights : #{Enum.join(Enum.map(network.weights, &get_size/1), ", ")}")
-    IO.puts("biases  : #{network.biases |> get_size()}")
-    IO.puts("-----------------------")
-    IO.inspect(network)
-    IO.puts("-----------------------")
-  end
-
-  defp get_size(e, acc \\ []) do
-    if is_list(Enum.at(e, 0)) do
-      get_size(Enum.at(e, 0), [length(e) | acc])
-    else
-      [length(e) | acc]
-      |> Enum.reverse()
-      |> Enum.join("x")
-    end
-  end
 end

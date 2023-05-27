@@ -1,0 +1,66 @@
+# XOR
+
+```elixir
+my_app_root = Path.join(__DIR__, "..")
+
+Mix.install(
+  [
+    {:elixir_ml, path: my_app_root, env: :dev},
+    {:kino, "~> 0.9.4"}
+  ],
+  config_path: Path.join(my_app_root, "config/config.exs"),
+  lockfile: Path.join(my_app_root, "mix.lock")
+)
+```
+
+## Imports and Data
+
+```elixir
+import ElixirML
+```
+
+```elixir
+training_data = [
+  [[0, 0], [1, 0]],
+  [[0, 1], [0, 1]],
+  [[1, 0], [0, 1]],
+  [[1, 1], [1, 0]]
+]
+```
+
+```elixir
+defmodule LiveUtils do
+  def inspect_network(network) do
+    data = [
+      %{key: "layers", value: Enum.join(network.size, ", ")},
+      %{key: "weights", value: Enum.join(Enum.map(network.weights, &get_size/1), ", ")},
+      %{key: "biases", value: get_size(network.biases)}
+    ]
+
+    Kino.DataTable.new(data) |> Kino.render()
+    network
+  end
+
+  defp get_size(e, acc \\ []) do
+    if is_list(Enum.at(e, 0)) do
+      get_size(Enum.at(e, 0), [length(e) | acc])
+    else
+      [length(e) | acc]
+      |> Enum.reverse()
+      |> Enum.join("x")
+    end
+  end
+end
+```
+
+## Code
+
+```elixir
+output =
+  ElixirML.input(training_data)
+  |> layer(5)
+  |> gen_network()
+  |> LiveUtils.inspect_network()
+
+# |> predict()
+```
