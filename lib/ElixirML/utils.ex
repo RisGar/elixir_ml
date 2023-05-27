@@ -1,4 +1,7 @@
 defmodule ElixirML.Utils do
+  @type vector :: nonempty_list(number)
+  @type matrix :: nonempty_list(nonempty_list(number))
+
   @spec sigmoid(number) :: float
   def sigmoid(x) do
     1 / (1 + :math.exp(-x))
@@ -25,6 +28,12 @@ defmodule ElixirML.Utils do
     end
   end
 
+  def matrix_dot_product(a, b) do
+    for i <- 0..(length(a) - 1) do
+      Enum.at(a, i) * Enum.at(b, i)
+    end
+  end
+
   @doc "Computes the dot product of two vectors"
   @spec dot_product([number], [number]) :: number
   def dot_product(a, b) when length(a) == length(b), do: dot_product(a, b, 0)
@@ -36,17 +45,23 @@ defmodule ElixirML.Utils do
   defp dot_product([], [], product), do: product
   defp dot_product([h1 | t1], [h2 | t2], product), do: dot_product(t1, t2, product + h1 * h2)
 
-  @spec get_weights(nonempty_list(integer)) :: nonempty_list(nonempty_list(nonempty_list(float)))
-  def get_weights(layers) do
-    layers
-    |> Enum.zip(Enum.drop(layers, 1))
-    |> Enum.map(&random_matrix/1)
+  def inspect_network(network) do
+    IO.puts("-----------------------")
+    IO.puts("layers  : #{Enum.join(network.size, ", ")}")
+    IO.puts("weights : #{Enum.join(Enum.map(network.weights, &get_size/1), ", ")}")
+    IO.puts("biases  : #{network.biases |> get_size()}")
+    IO.puts("-----------------------")
+    IO.inspect(network)
+    IO.puts("-----------------------")
   end
 
-  @spec get_biases(nonempty_list(integer)) :: nonempty_list(nonempty_list(float))
-  def get_biases(layers) do
-    layers
-    |> Enum.drop(1)
-    |> Enum.map(&random_vector/1)
+  defp get_size(e, acc \\ []) do
+    if is_list(Enum.at(e, 0)) do
+      get_size(Enum.at(e, 0), [length(e) | acc])
+    else
+      [length(e) | acc]
+      |> Enum.reverse()
+      |> Enum.join("x")
+    end
   end
 end

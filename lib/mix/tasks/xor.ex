@@ -4,6 +4,7 @@ defmodule Mix.Tasks.Xor do
 
   use Mix.Task
   import ElixirML
+  alias ElixirML.Utils
 
   @impl Mix.Task
   def run(_args) do
@@ -17,6 +18,7 @@ defmodule Mix.Tasks.Xor do
     ElixirML.input(training_data)
     |> layer(5)
     |> gen_network()
-    |> IO.inspect()
+    # |> predict()
+    |> Utils.inspect_network()
   end
 end
