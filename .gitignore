@@ -25,4 +25,8 @@ elixir_ml-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 
+# Mac files
 **/.DS_Store
+
+# C Objects
+/priv
