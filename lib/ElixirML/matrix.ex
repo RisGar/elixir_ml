@@ -11,8 +11,6 @@ defmodule ElixirML.Matrix do
     end
   end
 
-  @spec random(non_neg_integer | {non_neg_integer, non_neg_integer}) ::
-          %ElixirML.Matrix{data: binary}
   @doc ~S"Generates an $(m \times n)$ or $(1 \times n)$ sized matrix filled with random numbers"
   def random({rows, cols}) when is_integer(rows) and is_integer(cols),
     do: %Matrix{data: NIFs.random(rows, cols)}
@@ -20,19 +18,10 @@ defmodule ElixirML.Matrix do
   def random(cols) when is_integer(cols),
     do: %Matrix{data: NIFs.random(1, cols)}
 
-  @spec fill(non_neg_integer, non_neg_integer, float) :: %ElixirML.Matrix{data: binary}
   def fill(rows, cols, value) when is_integer(rows) and is_integer(cols) and is_float(value),
     do: %Matrix{data: NIFs.fill(rows, cols, value)}
 
-  @spec dot(
-          %ElixirML.Matrix{data: binary},
-          %ElixirML.Matrix{data: binary}
-        ) :: binary
   @doc ~S"Performs a matrix-matrix multiplication using cgemm"
-  def dot(%Matrix{} = a, %Matrix{} = b) do
-    NIFs.dot(
-      a.data,
-      b.data
-    )
-  end
+  def dot(%Matrix{} = a, %Matrix{} = b) when is_binary(a.data) and is_binary(b.data),
+    do: %Matrix{data: NIFs.dot(a.data, b.data)}
 end

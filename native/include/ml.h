@@ -9,7 +9,7 @@ typedef float *Matrix;
 #define MAT_COLS(mat) ((uint32_t *)mat)[1]
 #define MAT_STRIDE(mat) ((uint32_t *)mat)[2]
 #define MAT_POS(mat, row, col) (mat)[(row)*MAT_STRIDE(mat) + (col) + OFFSET]
-#define MAT_LEN(mat) (MAT_ROWS(mat) * MAT_COLS(mat) + OFFSET)
+#define VALS_LEN(mat) (MAT_ROWS(mat) * MAT_COLS(mat))
 
 void matrix_fill(Matrix mat, float n);
 void matrix_random(Matrix mat);

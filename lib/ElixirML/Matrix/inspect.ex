@@ -2,11 +2,9 @@ defmodule ElixirML.Matrix.Inspect do
   alias ElixirML.Matrix
 
   def do_inspect(%Matrix{
-        data: [
+        data:
           <<rows::unsigned-integer-little-32, cols::unsigned-integer-little-32,
-            stride::unsigned-integer-little-32>>,
-          <<vals::binary>>
-        ]
+            stride::unsigned-integer-little-32, vals::binary>>
       }) do
     values = parse_binary_float(vals)
     "#Matrix{rows: #{rows}, cols: #{cols}, stride: #{stride}, values: #{inspect(values)}}"

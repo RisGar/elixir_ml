@@ -5,24 +5,18 @@
 
 void matrix_fill(Matrix mat, float num)
 {
-  for (size_t i = 0; i < MAT_ROWS(mat); ++i)
+  for (size_t i = 0; i < VALS_LEN(mat); ++i)
   {
-    for (size_t j = 0; j < MAT_COLS(mat); ++j)
-    {
-      MAT_POS(mat, i, j) = num;
-    }
+    mat[i + OFFSET] = num;
   }
 }
 
 void matrix_random(Matrix mat)
 {
-  // RNG is initialized at load time.
-  for (size_t i = 0; i < MAT_ROWS(mat); ++i)
+
+  for (size_t i = 0; i < VALS_LEN(mat); ++i)
   {
-    for (size_t j = 0; j < MAT_COLS(mat); ++j)
-    {
-      MAT_POS(mat, i, j) = (float)rand() / (float)RAND_MAX;
-    }
+    mat[i + OFFSET] = (float)rand() / (float)RAND_MAX;
   }
 }
 
