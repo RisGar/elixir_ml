@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "*.mdx": "markdown",
+    "*.heex": "phoenix-heex",
+    "array": "c",
+    "vector": "c",
+    "chrono": "c",
+    "compare": "c",
+    "cstdint": "c",
+    "random": "c",
+    "span": "c",
+    "type_traits": "c"
+  }
+}

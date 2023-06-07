@@ -1,6 +1,7 @@
 defmodule ElixirML do
   alias ElixirML.Network
   alias ElixirML.Utils
+  alias ElixirML.Matrix
 
   def predict(network) do
     # for each input:
@@ -16,6 +17,14 @@ defmodule ElixirML do
     #   square of difference
     #   sum up all the squares (scan / reduce)
     #   divide by amount of rows
+  end
+
+  def train do
+    # for each sample:
+    #   for each layer:
+    #     for each current activation in layer n:
+    #       for each activation in layer n-1 (recursive):
+    #         ...
   end
 
   def input(training_data) do
@@ -46,11 +55,11 @@ defmodule ElixirML do
         weights:
           network.size
           |> Enum.zip(Enum.drop(network.size, 1))
-          |> Enum.map(&Utils.random_matrix/1),
+          |> Enum.map(&Matrix.random/1),
         biases:
           network.size
           |> Enum.drop(1)
-          |> Enum.map(&Utils.random_vector/1)
+          |> Enum.map(&Matrix.random/1)
     }
   end
 end

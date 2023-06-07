@@ -4,13 +4,14 @@
 
 typedef struct
 {
-  size_t rows;
-  size_t cols;
-  size_t stride;
-  double *vals;
+  unsigned int rows;
+  unsigned int cols;
+  unsigned int stride;
+  float *vals;
 } Matrix;
 
 #define MAT_POS(mat, row, col) (mat).vals[(row) * (mat).stride + (col)]
 
-void matrix_fill(Matrix mat, const double n);
+void matrix_fill(Matrix mat, float n);
 void matrix_random(Matrix mat);
+void matrix_dot(Matrix res, Matrix a, Matrix b);

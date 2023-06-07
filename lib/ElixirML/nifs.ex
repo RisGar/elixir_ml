@@ -30,8 +30,13 @@ defmodule ElixirML.NIFs do
       when is_integer(rows) and is_integer(cols),
       do: :erlang.nif_error(:nif_library_not_loaded)
 
-  @spec fill(non_neg_integer, non_neg_integer, non_neg_integer) :: binary
+  @spec fill(non_neg_integer, non_neg_integer, float) :: binary
   def fill(rows, cols, value)
-      when is_integer(rows) and is_integer(cols) and is_integer(value),
+      when is_integer(rows) and is_integer(cols) and is_float(value),
+      do: :erlang.nif_error(:nif_library_not_loaded)
+
+  @spec dot(binary, binary) :: binary
+  def dot(a, b)
+      when is_binary(a) and is_binary(b),
       do: :erlang.nif_error(:nif_library_not_loaded)
 end
