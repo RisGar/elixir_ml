@@ -1,17 +1,52 @@
-\documentclass[10pt]{article}
-\usepackage[usenames]{color} %used for font color
+\documentclass[10pt,titlepage]{article}
+% \usepackage[usenames]{color} %used for font color
 \usepackage{amssymb} %maths
 \usepackage{amsmath} %maths
 \usepackage[utf8]{inputenc} %useful to type directly diacritic characters
+\usepackage[final]{minted}
+\usepackage{xcolor} % syntax highlighting for code blocks
+\usepackage[german]{babel}
+\usepackage{csquotes}
+\usepackage{blindtext}
+\usepackage{charter} % text font
+\usepackage{sourcecodepro} % code font
+\usepackage[a4paper]{geometry}
+\usepackage[notes,backend=biber]{biblatex-chicago}
 
+% BEGIN styling
+\definecolor{bg}{rgb}{0.157,0.173,0.204}
+\usemintedstyle{one-dark}
+\AddToHook{cmd/section/before}{\clearpage}
+% END styling
+
+% BEGIN metadata
+\title{Maschinelles Lernen}
+\author{Rishab Garg}
+\date{2024 \\ März}
+\bibliography{citations}
+% END metadata
+
+% BEGIN content
 \begin{document}
+\maketitle
 
-The well known Pythagorean theorem \(x^2 + y^2 = z^2\) was 
-proved to be invalid for other exponents. 
-Meaning the next equation has no integer solutions:
+\begin{abstract}
+  \blindtext
+\end{abstract}
 
-\begin{align}
-  x^n + y^n = z^n
-\end{align}
+\tableofcontents
+
+\section{Einleitung}
+
+\blindmathpaper
+
+\section{Implementation}
+
+\inputminted[bgcolor=bg]{c}{../native/src/ml.c}
+
+Das wurde so gesagt \autocite{abramsky_hard_2002}.
+
+\printbibliography[heading=bibintoc]
 
 \end{document}
+% END content
