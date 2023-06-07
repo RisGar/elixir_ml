@@ -12,28 +12,6 @@ defmodule ElixirML.Utils do
     sigmoid(x) * (1 - sigmoid(x))
   end
 
-  @doc "Generates an `n` dimensional vector filled with random numbers in a standard normal distribution"
-  @spec random_vector(pos_integer) :: nonempty_list(float)
-  def random_vector(n) do
-    for _ <- 1..n do
-      :rand.normal()
-    end
-  end
-
-  @doc ~S"Generates an $m \times n$ sized matrix filled with random numbers in a standard normal distribution"
-  @spec random_matrix({pos_integer, pos_integer}) :: nonempty_list(nonempty_list(float))
-  def random_matrix({n, m}) do
-    for _ <- 1..m do
-      random_vector(n)
-    end
-  end
-
-  def matrix_dot_product(a, b) do
-    for i <- 0..(length(a) - 1) do
-      Enum.at(a, i) * Enum.at(b, i)
-    end
-  end
-
   @doc "Computes the dot product of two vectors"
   @spec dot_product([number], [number]) :: number
   def dot_product(a, b) when length(a) == length(b), do: dot_product(a, b, 0)
