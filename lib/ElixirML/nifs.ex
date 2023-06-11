@@ -35,6 +35,11 @@ defmodule ElixirML.NIFs do
       when is_integer(rows) and is_integer(cols) and is_float(value),
       do: :erlang.nif_error(:nif_library_not_loaded)
 
+  @spec sum(binary, binary) :: binary
+  def sum(a, b)
+      when is_binary(a) and is_binary(b),
+      do: :erlang.nif_error(:nif_library_not_loaded)
+
   @spec dot(binary, binary) :: binary
   def dot(a, b)
       when is_binary(a) and is_binary(b),

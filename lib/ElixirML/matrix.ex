@@ -18,8 +18,16 @@ defmodule ElixirML.Matrix do
   def random(cols) when is_integer(cols),
     do: %Matrix{data: NIFs.random(1, cols)}
 
-  def fill(rows, cols, value) when is_integer(rows) and is_integer(cols) and is_float(value),
+  @doc ~S"Fills an $(m \times n)$ or $(1 \times n)$ sized matrix filled with the specified value"
+  def fill({rows, cols}, value) when is_integer(rows) and is_integer(cols) and is_float(value),
     do: %Matrix{data: NIFs.fill(rows, cols, value)}
+
+  def fill(cols, value) when is_integer(cols) and is_float(value),
+    do: %Matrix{data: NIFs.fill(1, cols, value)}
+
+  @doc ~S"Performs matrix addition on two matrices of equal dimensions"
+  def sum(a, b) when is_binary(a.data) and is_binary(b.data),
+    do: %Matrix{data: NIFs.sum(a.data, b.data)}
 
   @doc ~S"Performs a matrix-matrix multiplication using cgemm"
   def dot(%Matrix{} = a, %Matrix{} = b) when is_binary(a.data) and is_binary(b.data),

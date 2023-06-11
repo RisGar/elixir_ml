@@ -2,11 +2,13 @@
 
 [![GH Build](https://github.com/RisGar/elixir_ml/actions/workflows/elixir.yml/badge.svg)](https://github.com/RisGar/elixir_ml/actions/workflows/elixir.yml)
 
-Deep learning by scratch in elixir without any external depencencies.
+Deep learning in Elixir using [Erlang NIFs](https://www.erlang.org/doc/tutorial/nif.html).
+Written in C which uses native the MacOS BLAS implementation through [vecLib](https://developer.apple.com/documentation/accelerate/veclib) for processing.
 
 ## Requirements
 
-- Elixir 14.4
+- MacOS with XCode Command Line Tools
+- Elixir 14.4+
 
 ## Installation
 

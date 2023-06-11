@@ -1,9 +1,16 @@
-BLAS = blas
-COMPILE_ARCH=darwin
+UNAME := $(shell uname -s)
+
+ifneq ($(UNAME), Darwin)
+$(error Error: OS is not supported)
+endif
+
+COMPILE_ARCH = "MacOS (Darwin)"
+BLAS = "Apple Accelerate"
 
 ERL_INCLUDE_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
-VECLIB_INCLUDE_PATH = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/Current/Frameworks/vecLib.framework/Headers
-CFLAGS = -fPIC -O3 -std=c2x -pedantic -Wall -Werror -Wextra -I${VECLIB_INCLUDE_PATH} -I$(ERL_INCLUDE_PATH)
+VECLIB_INCLUDE_PATH = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Headers
+
+CFLAGS = -fPIC -O3 -std=c99 -pedantic -Wall -Werror -Wextra -I${VECLIB_INCLUDE_PATH} -I$(ERL_INCLUDE_PATH)
 LDFLAGS = -lblas -flat_namespace -undefined suppress
 
 SRC_DIRECTORY = ./native/src
