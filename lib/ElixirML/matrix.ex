@@ -30,6 +30,6 @@ defmodule ElixirML.Matrix do
     do: %Matrix{data: NIFs.sum(a.data, b.data)}
 
   @doc ~S"Performs a matrix-matrix multiplication using cgemm"
-  def dot(%Matrix{} = a, %Matrix{} = b) when is_binary(a.data) and is_binary(b.data),
-    do: %Matrix{data: NIFs.dot(a.data, b.data)}
+  def prod(%Matrix{} = a, %Matrix{} = b) when is_binary(a.data) and is_binary(b.data),
+    do: %Matrix{data: NIFs.prod(a.data, b.data)}
 end

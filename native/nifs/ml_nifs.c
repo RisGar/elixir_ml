@@ -1,24 +1,44 @@
+#include <time.h>
+
 #include "../include/ml.h"
 #include "erl_nif.h"
-#include <time.h>
 
 #define UNUSED(x) x __attribute__((__unused__))
 
+// ------------------------------------------------------
+//
+// Helper functions
+//
+// ------------------------------------------------------
+
 ERL_NIF_TERM matrix_to_nif(Matrix mat, ErlNifEnv *env)
 {
-  size_t size = OFFSET * sizeof(uint32_t) + MAT_ROWS(mat) * MAT_COLS(mat) * sizeof(float);
-  // ERL_NIF_TERM dims;
+  size_t size =
+      OFFSET * sizeof(uint64_t) + MAT_ROWS(mat) * MAT_COLS(mat) * sizeof(double);
 
-  return enif_make_resource_binary(env, mat, mat, size);
+  ErlNifBinary bin = {
+      .data = (unsigned char *)mat,
+      .size = size,
+  };
+  ERL_NIF_TERM term = enif_make_binary(env, &bin);
+  enif_free(mat);
+
+  return term;
 }
 
-Matrix nif_to_matrix(ErlNifEnv *env, ERL_NIF_TERM arg)
+void enif_get_matrix(ErlNifEnv *env, ERL_NIF_TERM arg, Matrix *mat)
 {
-  ErlNifBinary mat_raw;
-  (void)enif_inspect_binary(env, arg, &mat_raw);
-  Matrix mat = (float *)mat_raw.data;
-  return mat;
+  ErlNifBinary bin;
+  (void)enif_inspect_binary(env, arg, &bin);
+
+  *mat = (double *)bin.data;
 }
+
+// ------------------------------------------------------
+//
+// Exported NIFs
+//
+// ------------------------------------------------------
 
 static ERL_NIF_TERM fill_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
 {
@@ -48,8 +68,9 @@ static ERL_NIF_TERM random_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ER
 
 static ERL_NIF_TERM multiply_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
 {
-  Matrix mat_a = nif_to_matrix(env, argv[0]);
-  Matrix mat_b = nif_to_matrix(env, argv[1]);
+  Matrix mat_a, mat_b;
+  enif_get_matrix(env, argv[0], &mat_a);
+  enif_get_matrix(env, argv[1], &mat_b);
 
   unsigned int rows = MAT_ROWS(mat_a);
   unsigned int cols = MAT_COLS(mat_b);
@@ -62,8 +83,9 @@ static ERL_NIF_TERM multiply_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const 
 
 static ERL_NIF_TERM add_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
 {
-  Matrix mat_a = nif_to_matrix(env, argv[0]);
-  Matrix mat_b = nif_to_matrix(env, argv[1]);
+  Matrix mat_a, mat_b;
+  enif_get_matrix(env, argv[0], &mat_a);
+  enif_get_matrix(env, argv[1], &mat_b);
 
   unsigned int rows = MAT_ROWS(mat_a);
   unsigned int cols = MAT_COLS(mat_a);
@@ -77,12 +99,13 @@ static ERL_NIF_TERM add_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_N
 static ErlNifFunc nif_funcs[] = {
     {"fill", 3, fill_matrix, 0},
     {"random", 2, random_matrix, 0},
-    {"dot", 2, multiply_matrix, 0},
+    {"prod", 2, multiply_matrix, 0},
     {"sum", 2, add_matrix, 0},
 };
 
 // RNG initialization.
-int load(ErlNifEnv *UNUSED(env), void **UNUSED(priv_data), ERL_NIF_TERM UNUSED(load_info))
+int load(ErlNifEnv *UNUSED(env), void **UNUSED(priv_data),
+         ERL_NIF_TERM UNUSED(load_info))
 {
   srand(time(NULL) + clock());
   return 0;

@@ -30,3 +30,6 @@ elixir_ml-*.tar
 
 # C Objects
 /priv
+
+# Downloaded datasets
+datasets/

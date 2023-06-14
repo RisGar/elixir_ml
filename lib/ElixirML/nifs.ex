@@ -40,8 +40,8 @@ defmodule ElixirML.NIFs do
       when is_binary(a) and is_binary(b),
       do: :erlang.nif_error(:nif_library_not_loaded)
 
-  @spec dot(binary, binary) :: binary
-  def dot(a, b)
+  @spec prod(binary, binary) :: binary
+  def prod(a, b)
       when is_binary(a) and is_binary(b),
       do: :erlang.nif_error(:nif_library_not_loaded)
 end

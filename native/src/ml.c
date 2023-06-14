@@ -1,12 +1,29 @@
-#include "../include/ml.h"
-#include "erl_nif.h"
-
 #include <cblas.h>
 #include <assert.h>
 
+#include "../include/ml.h"
+#include "erl_nif.h"
+
+// ------------------------------------------------------
+//
+// Helper functions
+//
+// ------------------------------------------------------
+
+double sigmoid(double x)
+{
+  return 1.0 / (1.0 + exp(-x));
+}
+
+// ------------------------------------------------------
+//
+// Matrix functions
+//
+// ------------------------------------------------------
+
 Matrix matrix_alloc(unsigned int rows, unsigned int cols)
 {
-  size_t size = OFFSET * sizeof(uint32_t) + rows * cols * sizeof(float);
+  size_t size = OFFSET * sizeof(uint64_t) + rows * cols * sizeof(double);
   Matrix mat = enif_alloc(size);
   MAT_ROWS(mat) = rows;
   MAT_COLS(mat) = cols;
@@ -14,7 +31,7 @@ Matrix matrix_alloc(unsigned int rows, unsigned int cols)
   return mat;
 }
 
-void matrix_fill(Matrix mat, float num)
+void matrix_fill(Matrix mat, double num)
 {
   for (size_t i = 0; i < VALS_LEN(mat); ++i)
   {
@@ -27,7 +44,7 @@ void matrix_random(Matrix mat)
 
   for (size_t i = 0; i < VALS_LEN(mat); ++i)
   {
-    mat[i + OFFSET] = (float)rand() / (float)RAND_MAX;
+    mat[i + OFFSET] = (double)rand() / (double)RAND_MAX;
   }
 }
 
@@ -46,7 +63,7 @@ void matrix_dot(Matrix res, Matrix a, Matrix b)
 {
   assert(MAT_COLS(a) == MAT_ROWS(b));
 
-  cblas_sgemm(CblasRowMajor,
+  cblas_dgemm(CblasRowMajor,
               CblasNoTrans,
               CblasNoTrans,
               MAT_ROWS(a),
