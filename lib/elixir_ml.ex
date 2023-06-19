@@ -3,7 +3,7 @@ defmodule ElixirML do
   alias ElixirML.Utils
   alias ElixirML.Matrix
 
-  def predict(network) do
+  def feedforward(network) do
     # for each input:
     #   dot product with weights
     #   sum with bias
@@ -48,7 +48,7 @@ defmodule ElixirML do
     }
   end
 
-  def gen_network(%Network{features: [head | tail]} = network) do
+  def init_weights(%Network{features: [head | tail]} = network) do
     %Network{
       network
       | features: [head | [[] | tail]],

@@ -1,6 +1,6 @@
-defmodule Mix.Tasks.Xor do
+defmodule Mix.Tasks.Fashion do
   @moduledoc "Example implementation of a network aiming to replicate a XOR gate"
-  @shortdoc "Simple XOR network"
+  @shortdoc "Recognise items in FashionMNIST dataset"
 
   use Mix.Task
   import ElixirML

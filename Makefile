@@ -13,37 +13,30 @@ VECLIB_INCLUDE_PATH = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System
 CFLAGS = -fPIC -O3 -std=c99 -pedantic -Wall -Werror -Wextra -I${VECLIB_INCLUDE_PATH} -I$(ERL_INCLUDE_PATH) -DACCELERATE_NEW_LAPACK -DACCELERATE_LAPACK_ILP64
 LDFLAGS = -lblas -flat_namespace -undefined suppress
 
-SRC_DIRECTORY = ./native/src
-INCLUDE_DIRECTORY = ./native/include
+SRC_DIRECTORY = ./src
 OBJ_DIRECTORY = ./_build/obj
-NIFS_DIRECTORY = ./native/nifs
 PRIV_DIRECTORY = ./priv
 
-SOURCES_DIRECTORIES := $(shell find $(SRC_DIRECTORY) -type d)
-OBJECTS_DIRECTORIES := $(subst $(SRC_DIRECTORY),$(OBJ_DIRECTORY),$(SOURCES_DIRECTORIES))
-
-SOURCES := $(shell find $(SRC_DIRECTORY) -name *.c)
-HEADERS := $(shell find $(INCLUDE_DIRECTORY) -name *.h)
+SOURCES := $(shell find $(SRC_DIRECTORY) \( -iname "*.c" ! -iname "*_nifs.c" \) )
 OBJECTS := $(SOURCES:$(SRC_DIRECTORY)/%.c=$(OBJ_DIRECTORY)/%.o)
-NIFS_SOURCES := $(wildcard $(NIFS_DIRECTORY)/*.c)
-NIFS_HELPERS := $(shell find $(NIFS_DIRECTORY) -name *_helper.c)
-NIFS_OBJECTS := $(NIFS_SOURCES:$(NIFS_DIRECTORY)/%.c=$(PRIV_DIRECTORY)/%.so)
+NIFS_SOURCES := $(shell find $(SRC_DIRECTORY) -iname "*_nifs.c" )
+NIFS_OBJECTS := $(NIFS_SOURCES:$(SRC_DIRECTORY)/%.c=$(PRIV_DIRECTORY)/%.so)
 
 .PHONY: build
-build: $(OBJECTS_DIRECTORIES) $(OBJECTS) $(PRIV_DIRECTORY) $(NIFS_OBJECTS)
+build: $(OBJ_DIRECTORY) $(OBJECTS) $(PRIV_DIRECTORY) $(NIFS_OBJECTS)
 
-$(OBJECTS_DIRECTORIES):
-	@mkdir -p $(OBJECTS_DIRECTORIES)
+$(OBJ_DIRECTORY):
+	@mkdir -p $(OBJ_DIRECTORY)
 	@echo 'Compile Arch: '$(COMPILE_ARCH)
 	@echo 'Library BLAS: '$(BLAS)
 
-$(OBJECTS): $(OBJ_DIRECTORY)/%.o : $(SRC_DIRECTORY)/%.c $(INCLUDE_DIRECTORY)/%.h
+$(OBJECTS): $(OBJ_DIRECTORY)/%.o : $(SRC_DIRECTORY)/%.c $(SRC_DIRECTORY)/%.h
 	@echo 'Compiling: '$<
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(PRIV_DIRECTORY):
 	@mkdir -p $(PRIV_DIRECTORY)
 
-$(NIFS_OBJECTS): $(PRIV_DIRECTORY)/%.so : $(NIFS_DIRECTORY)/%.c $(OBJECTS) $(NIFS_HELPERS)
+$(NIFS_OBJECTS): $(PRIV_DIRECTORY)/%.so : $(SRC_DIRECTORY)/%.c $(OBJECTS)
 	@echo 'Creating NIF: '$@
 	@$(CC) $(CFLAGS) $(OBJECTS) -o $@ $< $(LDFLAGS)

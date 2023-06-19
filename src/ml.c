@@ -1,7 +1,8 @@
 #include <cblas.h>
 #include <assert.h>
+#include <stdlib.h>
 
-#include "../include/ml.h"
+#include "ml.h"
 #include "erl_nif.h"
 
 // ------------------------------------------------------
@@ -33,18 +34,26 @@ Matrix matrix_alloc(unsigned int rows, unsigned int cols)
 
 void matrix_fill(Matrix mat, double num)
 {
-  for (size_t i = 0; i < VALS_LEN(mat); ++i)
+  for (size_t i = OFFSET; i < TOTAL_LEN(mat); ++i)
   {
-    mat[i + OFFSET] = num;
+    mat[i] = num;
   }
 }
 
 void matrix_random(Matrix mat)
 {
 
-  for (size_t i = 0; i < VALS_LEN(mat); ++i)
+  for (size_t i = OFFSET; i < TOTAL_LEN(mat); ++i)
   {
-    mat[i + OFFSET] = (double)rand() / (double)RAND_MAX;
+    mat[i] = (double)arc4random() / (double)RAND_MAX;
+  }
+}
+
+void matrix_sig(Matrix mat)
+{
+  for (size_t i = OFFSET; i < TOTAL_LEN(mat); ++i)
+  {
+    mat[i] = sigmoid(mat[i]);
   }
 }
 
@@ -53,7 +62,7 @@ void matrix_sum(Matrix res, Matrix a, Matrix b)
   assert(MAT_ROWS(a) == MAT_ROWS(b));
   assert(MAT_COLS(b) == MAT_COLS(b));
 
-  for (size_t i = OFFSET; i < VALS_LEN(res) + OFFSET; ++i)
+  for (size_t i = OFFSET; i < TOTAL_LEN(res); ++i)
   {
     res[i] = a[i] + b[i];
   }

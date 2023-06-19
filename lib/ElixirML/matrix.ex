@@ -1,5 +1,5 @@
 defmodule ElixirML.Matrix do
-  alias ElixirML.NIFs
+  alias ElixirML.Matrix.NIFs
   alias ElixirML.Matrix
 
   defstruct data: []
@@ -24,6 +24,11 @@ defmodule ElixirML.Matrix do
 
   def fill(cols, value) when is_integer(cols) and is_float(value),
     do: %Matrix{data: NIFs.fill(1, cols, value)}
+
+  @doc ~S"Applies an activation function to every value in a matrix"
+  @spec activate(binary) :: %ElixirML.Matrix{data: binary}
+  def activate(mat) when is_binary(mat),
+    do: %Matrix{data: NIFs.sig(mat)}
 
   @doc ~S"Performs matrix addition on two matrices of equal dimensions"
   def sum(a, b) when is_binary(a.data) and is_binary(b.data),

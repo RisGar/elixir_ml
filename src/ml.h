@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 
 typedef double *Matrix;
@@ -11,9 +9,11 @@ typedef double *Matrix;
 #define MAT_POS(mat, row, col) (mat)[(row)*MAT_STRIDE(mat) + (col) + OFFSET]
 #define VALS_LEN(mat) (MAT_ROWS(mat) * MAT_COLS(mat))
 #define TOTAL_LEN(mat) (VALS_LEN(mat) + OFFSET)
+#define TOTAL_BIN_SIZE(mat) (TOTAL_LEN((double *)mat) * sizeof(double))
 
 Matrix matrix_alloc(unsigned int rows, unsigned int cols);
 void matrix_fill(Matrix mat, double n);
 void matrix_random(Matrix mat);
+void matrix_sig(Matrix mat);
 void matrix_sum(Matrix res, Matrix a, Matrix b);
 void matrix_dot(Matrix res, Matrix a, Matrix b);

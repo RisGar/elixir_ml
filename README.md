@@ -17,3 +17,5 @@ $ git clone https://github.com/RisGar/elixir_ml
 $ cd elixir_ml
 $ mix xor
 ```
+
+## Attributions

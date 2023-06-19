@@ -1,4 +1,4 @@
-defmodule ElixirML.NIFs do
+defmodule ElixirML.Matrix.NIFs do
   @on_load :load_nifs
 
   @doc false
@@ -33,6 +33,11 @@ defmodule ElixirML.NIFs do
   @spec fill(non_neg_integer, non_neg_integer, float) :: binary
   def fill(rows, cols, value)
       when is_integer(rows) and is_integer(cols) and is_float(value),
+      do: :erlang.nif_error(:nif_library_not_loaded)
+
+  @spec sig(binary) :: binary
+  def sig(mat)
+      when is_binary(mat),
       do: :erlang.nif_error(:nif_library_not_loaded)
 
   @spec sum(binary, binary) :: binary

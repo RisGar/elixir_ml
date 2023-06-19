@@ -1,6 +1,6 @@
 #include <time.h>
 
-#include "../include/ml.h"
+#include "ml.h"
 #include "erl_nif.h"
 
 #define UNUSED(x) x __attribute__((__unused__))
@@ -13,25 +13,27 @@
 
 ERL_NIF_TERM matrix_to_nif(Matrix mat, ErlNifEnv *env)
 {
-  size_t size =
-      OFFSET * sizeof(uint64_t) + MAT_ROWS(mat) * MAT_COLS(mat) * sizeof(double);
-
   ErlNifBinary bin = {
       .data = (unsigned char *)mat,
-      .size = size,
+      .size = TOTAL_BIN_SIZE(mat),
   };
+
   ERL_NIF_TERM term = enif_make_binary(env, &bin);
   enif_free(mat);
 
   return term;
 }
 
-void enif_get_matrix(ErlNifEnv *env, ERL_NIF_TERM arg, Matrix *mat)
+int enif_get_matrix(ErlNifEnv *env, ERL_NIF_TERM arg, Matrix *mat)
 {
   ErlNifBinary bin;
-  (void)enif_inspect_binary(env, arg, &bin);
+  enif_inspect_binary(env, arg, &bin);
 
+  *mat = enif_alloc(TOTAL_BIN_SIZE(bin.data));
   *mat = (double *)bin.data;
+  enif_release_binary(&bin);
+
+  return 0;
 }
 
 // ------------------------------------------------------
@@ -44,9 +46,9 @@ static ERL_NIF_TERM fill_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_
 {
   unsigned int rows, cols;
   double fill_num;
-  (void)enif_get_uint(env, argv[0], &rows);
-  (void)enif_get_uint(env, argv[1], &cols);
-  (void)enif_get_double(env, argv[2], &fill_num);
+  enif_get_uint(env, argv[0], &rows);
+  enif_get_uint(env, argv[1], &cols);
+  enif_get_double(env, argv[2], &fill_num);
 
   Matrix mat = matrix_alloc(rows, cols);
   matrix_fill(mat, fill_num);
@@ -57,11 +59,21 @@ static ERL_NIF_TERM fill_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_
 static ERL_NIF_TERM random_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
 {
   unsigned int rows, cols;
-  (void)enif_get_uint(env, argv[0], &rows);
-  (void)enif_get_uint(env, argv[1], &cols);
+  enif_get_uint(env, argv[0], &rows);
+  enif_get_uint(env, argv[1], &cols);
 
   Matrix mat = matrix_alloc(rows, cols);
   matrix_random(mat);
+
+  return matrix_to_nif(mat, env);
+}
+
+static ERL_NIF_TERM activate_sigmoid_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
+{
+  Matrix mat;
+  enif_get_matrix(env, argv[0], &mat);
+
+  matrix_sig(mat);
 
   return matrix_to_nif(mat, env);
 }
@@ -101,14 +113,7 @@ static ErlNifFunc nif_funcs[] = {
     {"random", 2, random_matrix, 0},
     {"prod", 2, multiply_matrix, 0},
     {"sum", 2, add_matrix, 0},
+    {"sig", 1, activate_sigmoid_matrix, 0},
 };
 
-// RNG initialization.
-int load(ErlNifEnv *UNUSED(env), void **UNUSED(priv_data),
-         ERL_NIF_TERM UNUSED(load_info))
-{
-  srand(time(NULL) + clock());
-  return 0;
-}
-
-ERL_NIF_INIT(Elixir.ElixirML.NIFs, nif_funcs, load, NULL, NULL, NULL)
+ERL_NIF_INIT(Elixir.ElixirML.Matrix.NIFs, nif_funcs, NULL, NULL, NULL, NULL)
