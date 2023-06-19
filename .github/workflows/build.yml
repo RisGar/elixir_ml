@@ -1,4 +1,4 @@
-name: Elixir CI
+name: C and Elixir CI
 
 on:
   push:
@@ -12,15 +12,18 @@ permissions:
 jobs:
   build:
     name: Build and test
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Make files available
+        uses: actions/checkout@v3
+      - name: Run Makefile
+        run: make
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.14.4" # Define the elixir version [required]
-          otp-version: "25.x" # Define the OTP version [required]
+          elixir-version: "1.14.4"
+          otp-version: "25.x"
       - name: Restore dependencies cache
         uses: actions/cache@v3
         with:
@@ -29,5 +32,5 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-
       - name: Install dependencies
         run: mix deps.get
-      - name: Run build
+      - name: Run test
         run: mix test
