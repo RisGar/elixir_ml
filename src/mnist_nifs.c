@@ -56,7 +56,7 @@ load_mnist_data(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *UNUSED
   puts("Loading labels...\n");
   load_mnist_labels(train_labels, test_labels);
 
-  return enif_make_list4(env,
+    return enif_make_list4(env,
                          images_to_nif(train_images, TRAIN_SIZE, env),
                          images_to_nif(test_images, TEST_SIZE, env),
                          labels_to_nif(train_labels, TRAIN_SIZE, env),

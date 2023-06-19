@@ -14,7 +14,7 @@ typedef int *Labels;
 #define TRAIN_SIZE 60000
 #define TEST_SIZE 10000
 
-#define IMAGE_SIZE 784 // 28x28
+#define IMAGE_SIZE 28 * 28
 
 #define IMAGE_HEADER_COUNT 4
 #define LABEL_HEADER_COUNT 2
@@ -29,5 +29,6 @@ inline uint32_t reverse_32(uint32_t value)
 
 Images images_alloc(unsigned int n);
 Labels labels_alloc(unsigned int n);
+void print_image(uint8_t data[IMAGE_SIZE]);
 void load_mnist_images(Images train, Images test);
 void load_mnist_labels(Labels train, Labels test);
