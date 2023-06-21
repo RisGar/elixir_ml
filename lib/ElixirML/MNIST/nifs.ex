@@ -1,27 +1,13 @@
 defmodule ElixirML.MNIST.NIFs do
-  @on_load :load_nifs
+  @moduledoc false
+  @on_load :load_nif
 
-  @doc false
-  @spec load_nifs :: :ok
-  def load_nifs do
-    priv_dir =
-      case :code.priv_dir(__MODULE__) do
-        {:error, _} ->
-          ebin_dir = :code.which(__MODULE__) |> :filename.dirname()
-          app_path = :filename.dirname(ebin_dir)
-          :filename.join(app_path, "priv")
+  def load_nif do
+    nif_file = :filename.join(:code.priv_dir(:elixir_ml), "mnist_nifs")
 
-        path ->
-          path
-      end
-
-    case :erlang.load_nif(:filename.join(priv_dir, "mnist_nifs"), 0) do
-      :ok ->
-        :ok
-
-      {:error, {:load_failed, reason}} ->
-        IO.warn("Error loading NIF #{reason}")
-        :ok
+    case :erlang.load_nif(nif_file, 0) do
+      :ok -> :ok
+      {:error, {_, reason}} -> IO.warn("Error loading NIF #{reason}")
     end
   end
 

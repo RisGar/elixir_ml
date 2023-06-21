@@ -1,6 +1,6 @@
 #include <time.h>
 
-#include "ml.h"
+#include "matrix.h"
 #include "erl_nif.h"
 
 #define UNUSED(x) x __attribute__((__unused__))

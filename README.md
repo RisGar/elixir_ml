@@ -1,7 +1,5 @@
 # ElixirML
 
-[![GH Build](https://github.com/RisGar/elixir_ml/actions/workflows/build.yml/badge.svg)](https://github.com/RisGar/elixir_ml/actions/workflows/build.yml)
-
 Deep learning in Elixir using [Erlang NIFs](https://www.erlang.org/doc/tutorial/nif.html).
 Written in C which uses native the MacOS BLAS implementation through [vecLib](https://developer.apple.com/documentation/accelerate/veclib) for processing.
 

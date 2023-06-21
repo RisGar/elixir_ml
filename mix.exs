@@ -8,6 +8,7 @@ defmodule ElixirML.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      compilers: [:elixir_make] ++ Mix.compilers(),
 
       # Docs
       name: "ElixirML",
@@ -31,7 +32,8 @@ defmodule ElixirML.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:commitlint, "~> 0.1.2", only: :dev, runtime: false}
+      {:commitlint, "~> 0.1.2", only: :dev, runtime: false},
+      {:elixir_make, "~> 0.4", runtime: false}
     ]
   end
 

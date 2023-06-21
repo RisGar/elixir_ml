@@ -1,7 +1,5 @@
 defmodule ElixirML.Matrix.Inspect do
-  alias ElixirML.Matrix
-
-  def do_inspect(%Matrix{
+  def do_inspect(%ElixirML.Matrix{
         data:
           <<rows::unsigned-integer-little-64, cols::unsigned-integer-little-64,
             stride::unsigned-integer-little-64, vals::binary>>

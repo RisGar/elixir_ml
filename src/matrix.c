@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "ml.h"
+#include "matrix.h"
 #include "erl_nif.h"
 
 // ------------------------------------------------------
