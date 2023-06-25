@@ -12,4 +12,8 @@ defmodule ElixirML.MNIST.NIFs do
   end
 
   def load, do: :erlang.nif_error(:nif_library_not_loaded)
+
+  def batch(mat, batch_size)
+      when is_binary(mat) and is_integer(batch_size),
+      do: :erlang.nif_error(:nif_library_not_loaded)
 end

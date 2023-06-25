@@ -26,9 +26,13 @@ defmodule ElixirML.Matrix do
     do: %Matrix{data: NIFs.fill(1, cols, value)}
 
   @doc ~S"Applies an activation function to every value in a matrix"
-  @spec activate(binary) :: %ElixirML.Matrix{data: binary}
-  def activate(mat) when is_binary(mat),
-    do: %Matrix{data: NIFs.sig(mat)}
+  def activate(mat, activation) when is_binary(mat.data) and is_atom(activation) do
+    case activation do
+      :sigmoid -> %Matrix{data: NIFs.sig(mat.data)}
+      :relu -> %Matrix{data: NIFs.rel(mat.data)}
+      _ -> raise "Invalid activation function"
+    end
+  end
 
   @doc ~S"Performs matrix addition on two matrices of equal dimensions"
   def sum(a, b) when is_binary(a.data) and is_binary(b.data),

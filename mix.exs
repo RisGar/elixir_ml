@@ -31,9 +31,9 @@ defmodule ElixirML.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.29.4", only: :dev, runtime: false},
       {:commitlint, "~> 0.1.2", only: :dev, runtime: false},
-      {:elixir_make, "~> 0.4", runtime: false}
+      {:elixir_make, "~> 0.7.7", runtime: false}
     ]
   end
 

@@ -1,7 +1,10 @@
 defmodule ElixirML.Network do
-  defstruct weights: [],
-            biases: [],
-            targets: [],
-            features: [],
-            size: []
+  defstruct size: nil,
+            activation: nil,
+            optimiser: nil,
+            loss: nil,
+            weights: nil,
+            biases: nil,
+            features: nil,
+            targets: nil
 end

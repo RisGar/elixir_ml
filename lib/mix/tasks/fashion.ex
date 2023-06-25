@@ -4,22 +4,34 @@ defmodule Mix.Tasks.Fashion do
 
   use Mix.Task
   import ElixirML
-  # alias ElixirML.Utils
+  alias ElixirML.MNIST
 
   @impl Mix.Task
   def run(_args) do
-    training_data = [
-      [[0, 0], [1, 0]],
-      [[0, 1], [0, 1]],
-      [[1, 0], [0, 1]],
-      [[1, 1], [1, 0]]
-    ]
+    image_size = 28 * 28
+    [train_images, test_images, train_labels, test_labels] = MNIST.load()
 
-    ElixirML.input(training_data)
-    |> layer(5)
-    |> init_weights()
+    ElixirML.init(
+      # layer sizes
+      [image_size, 10, 10, 10],
+      # layer activations
+      [:relu, :relu, :sigmoid],
+      # optimiser
+      :adamw,
+      # loss
+      :cross_entropy
+    )
+    |> train(
+      # input
+      train_images,
+      # target
+      train_labels,
+      # epochs
+      30,
+      # batch size
+      10
+    )
+    # |> feedforward()
     |> IO.inspect()
-
-    # |> predict()
   end
 end

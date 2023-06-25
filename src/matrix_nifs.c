@@ -1,40 +1,8 @@
 #include <time.h>
 
 #include "matrix.h"
+#include "conversion.h"
 #include "erl_nif.h"
-
-#define UNUSED(x) x __attribute__((__unused__))
-
-// ------------------------------------------------------
-//
-// Helper functions
-//
-// ------------------------------------------------------
-
-ERL_NIF_TERM matrix_to_nif(Matrix mat, ErlNifEnv *env)
-{
-  ErlNifBinary bin = {
-      .data = (unsigned char *)mat,
-      .size = TOTAL_BIN_SIZE(mat),
-  };
-
-  ERL_NIF_TERM term = enif_make_binary(env, &bin);
-  enif_free(mat);
-
-  return term;
-}
-
-int enif_get_matrix(ErlNifEnv *env, ERL_NIF_TERM arg, Matrix *mat)
-{
-  ErlNifBinary bin;
-  enif_inspect_binary(env, arg, &bin);
-
-  *mat = enif_alloc(TOTAL_BIN_SIZE(bin.data));
-  *mat = (double *)bin.data;
-  enif_release_binary(&bin);
-
-  return 0;
-}
 
 // ------------------------------------------------------
 //
@@ -78,6 +46,16 @@ static ERL_NIF_TERM activate_sigmoid_matrix(ErlNifEnv *env, int32_t UNUSED(argc)
   return matrix_to_nif(mat, env);
 }
 
+static ERL_NIF_TERM activate_relu_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
+{
+  Matrix mat;
+  enif_get_matrix(env, argv[0], &mat);
+
+  matrix_rel(mat);
+
+  return matrix_to_nif(mat, env);
+}
+
 static ERL_NIF_TERM multiply_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
 {
   Matrix mat_a, mat_b;
@@ -108,12 +86,29 @@ static ERL_NIF_TERM add_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_N
   return matrix_to_nif(res, env);
 }
 
+// static ERL_NIF_TERM batch_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
+// {
+//   unsigned int row;
+//   Matrix mat;
+//   enif_get_matrix(env, argv[0], &mat);
+//   enif_get_int(env, argv[1], &row);
+
+//   unsigned int rows = 1;
+//   unsigned int cols = MAT_COLS(mat);
+
+//   Matrix res = matrix_alloc(rows, cols);
+//   matrix_row(res, mat, row - 1);
+
+//   return matrix_to_nif(res, env);
+// }
+
 static ErlNifFunc nif_funcs[] = {
     {"fill", 3, fill_matrix, 0},
     {"random", 2, random_matrix, 0},
     {"prod", 2, multiply_matrix, 0},
     {"sum", 2, add_matrix, 0},
     {"sig", 1, activate_sigmoid_matrix, 0},
+    {"rel", 1, activate_relu_matrix, 0},
 };
 
 ERL_NIF_INIT(Elixir.ElixirML.Matrix.NIFs, nif_funcs, NULL, NULL, NULL, NULL)

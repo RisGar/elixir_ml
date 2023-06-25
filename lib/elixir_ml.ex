@@ -1,65 +1,73 @@
 defmodule ElixirML do
+  import ExUnit.Assertions
   alias ElixirML.Network
-  alias ElixirML.Utils
   alias ElixirML.Matrix
+  alias ElixirML.MNIST
 
-  def feedforward(network) do
-    # for each input:
-    #   dot product with weights
-    #   sum with bias
-    #   sigmoid
-  end
+  def feedforward(network, i \\ 0) when is_struct(network) and is_integer(i) do
+    if i < length(network.size) - 1 do
+      next_features =
+        Matrix.prod(Enum.at(network.features, i), Enum.at(network.weights, i))
+        |> Matrix.sum(Enum.at(network.biases, i))
+        |> Matrix.activate(network.activation)
 
-  def cost(network) do
-    # for each output:
-    #   forward
-    #   difference = final output - expected output
-    #   square of difference
-    #   sum up all the squares (scan / reduce)
-    #   divide by amount of rows
-  end
-
-  def train do
-    # for each sample:
-    #   for each layer:
-    #     for each current activation in layer n:
-    #       for each activation in layer n-1 (recursive):
-    #         ...
-  end
-
-  def input(training_data) do
-    [inputs, outputs] =
-      [[input | _], [target | _]] =
-      training_data
-      |> Enum.zip()
-      |> Enum.map(&Tuple.to_list/1)
-
-    %Network{
-      features: [inputs, []],
-      targets: outputs,
-      size: [length(input), length(target)]
-    }
-  end
-
-  def layer(%Network{size: [head | tail]} = network, size) do
-    %Network{
+      feedforward(
+        %Network{network | features: [next_features | network.features] |> Enum.reverse()},
+        i + 1
+      )
+    else
       network
-      | size: [head | [size | tail]]
-    }
+    end
   end
 
-  def init_weights(%Network{features: [head | tail]} = network) do
-    %Network{
+  defp each_batch(network, img_batch, lbl_batch, batch_nums, i \\ 0) do
+    if i < batch_nums do
+    else
       network
-      | features: [head | [[] | tail]],
-        weights:
-          network.size
-          |> Enum.zip(Enum.drop(network.size, 1))
-          |> Enum.map(&Matrix.random/1),
-        biases:
-          network.size
-          |> Enum.drop(1)
-          |> Enum.map(&Matrix.random/1)
+    end
+  end
+
+  defp each_epoch(network, images, labels, epochs, batch_size, i \\ 0) do
+    if i < epochs do
+      # shuffle;
+
+      batched_images = MNIST.batch(images, batch_size)
+      batched_labels = MNIST.batch(labels, batch_size)
+      Enum.zip(batched_images, batched_labels)
+
+      each_batch(network, batched_images, batched_labels, length(batched_images))
+
+      each_epoch(network, images, labels, epochs, batch_size, i + 1)
+    else
+      network
+    end
+  end
+
+  def train(network, images, labels, epochs, batch_size)
+      when is_struct(network) and is_struct(images) and is_struct(labels) and is_integer(epochs) and
+             is_integer(batch_size) do
+    # for each epoch:
+    #   batches = batch_nif;
+    #   for batch in batches:
+    #     batch_train;
+    #   shuffle;
+
+    each_epoch(network, images, labels, epochs, batch_size)
+
+    # %Network{network | features: [images], targets: labels}
+  end
+
+  def init(size, activation, optimiser, loss)
+      when is_list(size) and is_list(activation) and is_atom(optimiser) and is_atom(loss) do
+    assert(length(size) - 1 == length(activation))
+
+    %Network{
+      size: size,
+      activation: activation,
+      optimiser: optimiser,
+      loss: loss,
+      weights: Enum.zip(size, Enum.drop(size, 1)) |> Enum.map(&Matrix.random/1),
+      biases: Enum.drop(size, 1) |> Enum.map(&Matrix.random/1)
     }
   end
 end

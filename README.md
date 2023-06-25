@@ -13,7 +13,13 @@ Written in C which uses native the MacOS BLAS implementation through [vecLib](ht
 ```console
 $ git clone https://github.com/RisGar/elixir_ml
 $ cd elixir_ml
-$ mix xor
+$ ./datasets.sh
+$ mix deps.get
 ```
+
+Then run any of the provided mix tasks:
+
+- xor
+- mnist
 
 ## Attributions

@@ -16,6 +16,24 @@ double sigmoid(double x)
   return 1.0 / (1.0 + exp(-x));
 }
 
+double sigmoid_prime(double x)
+{
+  return sigmoid(x) * (1 - sigmoid(x));
+}
+
+#define RELU_FACTOR 0.01
+
+double leaky_relu(double x)
+{
+  return x > 0 ? x : RELU_FACTOR * x;
+  // return x > 0 ? x : 0;
+}
+
+double leaky_relu_prime(double x)
+{
+  return x > 0 ? 1 : RELU_FACTOR;
+}
+
 // ------------------------------------------------------
 //
 // Matrix functions
@@ -57,6 +75,14 @@ void matrix_sig(Matrix mat)
   }
 }
 
+void matrix_rel(Matrix mat)
+{
+  for (size_t i = OFFSET; i < TOTAL_LEN(mat); ++i)
+  {
+    mat[i] = leaky_relu(mat[i]);
+  }
+}
+
 void matrix_sum(Matrix res, Matrix a, Matrix b)
 {
   assert(MAT_ROWS(a) == MAT_ROWS(b));
@@ -66,6 +92,17 @@ void matrix_sum(Matrix res, Matrix a, Matrix b)
   {
     res[i] = a[i] + b[i];
   }
+}
+
+Matrix matrix_batch(Matrix mat, unsigned int batch_size, unsigned int batch_num)
+{
+  Matrix res = matrix_alloc(batch_size, MAT_COLS(mat));
+  for (size_t i = OFFSET; i < TOTAL_LEN(res); ++i)
+  {
+    res[i] = mat[i + batch_size * batch_num];
+  }
+
+  return res;
 }
 
 void matrix_dot(Matrix res, Matrix a, Matrix b)

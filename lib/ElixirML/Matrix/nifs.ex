@@ -23,6 +23,10 @@ defmodule ElixirML.Matrix.NIFs do
       when is_binary(mat),
       do: :erlang.nif_error(:nif_library_not_loaded)
 
+  def rel(mat)
+      when is_binary(mat),
+      do: :erlang.nif_error(:nif_library_not_loaded)
+
   def sum(a, b)
       when is_binary(a) and is_binary(b),
       do: :erlang.nif_error(:nif_library_not_loaded)

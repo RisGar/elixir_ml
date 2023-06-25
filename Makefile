@@ -26,8 +26,6 @@ NIFS_OBJECTS := $(NIFS_SOURCES:$(SRC_DIRECTORY)/%.c=$(PRIV_DIRECTORY)/%.so)
 build: $(OBJ_DIRECTORY) $(OBJECTS) $(PRIV_DIRECTORY) $(NIFS_OBJECTS)
 
 $(OBJ_DIRECTORY):
-	ERL_CONTENTS := $(shell ls ${ERL_INCLUDE_PATH} )
-	@echo $(ERL_CONTENTS)
 	@mkdir -p $(OBJ_DIRECTORY)
 	@echo 'Compile Arch: '$(COMPILE_ARCH)
 	@echo 'Library BLAS: '$(BLAS)
