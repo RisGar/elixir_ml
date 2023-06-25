@@ -86,21 +86,16 @@ static ERL_NIF_TERM add_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_N
   return matrix_to_nif(res, env);
 }
 
-// static ERL_NIF_TERM batch_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
-// {
-//   unsigned int row;
-//   Matrix mat;
-//   enif_get_matrix(env, argv[0], &mat);
-//   enif_get_int(env, argv[1], &row);
+static ERL_NIF_TERM shuffle_matrix(ErlNifEnv *env, int32_t UNUSED(argc), const ERL_NIF_TERM *argv)
+{
+  Matrix mat;
+  enif_get_matrix(env, argv[0], &mat);
 
-//   unsigned int rows = 1;
-//   unsigned int cols = MAT_COLS(mat);
+  Matrix res = matrix_alloc(MAT_ROWS(mat), MAT_COLS(mat));
+  matrix_shuffle_rows(res, mat);
 
-//   Matrix res = matrix_alloc(rows, cols);
-//   matrix_row(res, mat, row - 1);
-
-//   return matrix_to_nif(res, env);
-// }
+  return matrix_to_nif(mat, env);
+}
 
 static ErlNifFunc nif_funcs[] = {
     {"fill", 3, fill_matrix, 0},
@@ -109,6 +104,7 @@ static ErlNifFunc nif_funcs[] = {
     {"sum", 2, add_matrix, 0},
     {"sig", 1, activate_sigmoid_matrix, 0},
     {"rel", 1, activate_relu_matrix, 0},
+    {"shuffle", 1, shuffle_matrix, 0},
 };
 
 ERL_NIF_INIT(Elixir.ElixirML.Matrix.NIFs, nif_funcs, NULL, NULL, NULL, NULL)

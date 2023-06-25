@@ -22,6 +22,7 @@ defmodule ElixirML do
 
   defp each_batch(network, img_batch, lbl_batch, batch_nums, i \\ 0) do
     if i < batch_nums do
+      each_batch(network, img_batch, lbl_batch, batch_nums, i + 1)
     else
       network
     end
@@ -29,11 +30,11 @@ defmodule ElixirML do
 
   defp each_epoch(network, images, labels, epochs, batch_size, i \\ 0) do
     if i < epochs do
-      # shuffle;
+      images = Matrix.shuffle(images)
+      labels = Matrix.shuffle(labels)
 
       batched_images = MNIST.batch(images, batch_size)
       batched_labels = MNIST.batch(labels, batch_size)
-      Enum.zip(batched_images, batched_labels)
 
       each_batch(network, batched_images, batched_labels, length(batched_images))
 

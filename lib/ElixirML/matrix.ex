@@ -41,4 +41,7 @@ defmodule ElixirML.Matrix do
   @doc ~S"Performs a matrix-matrix multiplication using cgemm"
   def prod(%Matrix{} = a, %Matrix{} = b) when is_binary(a.data) and is_binary(b.data),
     do: %Matrix{data: NIFs.prod(a.data, b.data)}
+
+  @doc ~S"Shuffles the first dimensiion (rows) of a matrix"
+  def shuffle(mat) when is_binary(mat.data), do: %Matrix{data: NIFs.shuffle(mat.data)}
 end

@@ -34,4 +34,8 @@ defmodule ElixirML.Matrix.NIFs do
   def prod(a, b)
       when is_binary(a) and is_binary(b),
       do: :erlang.nif_error(:nif_library_not_loaded)
+
+  def shuffle(mat)
+      when is_binary(mat),
+      do: :erlang.nif_error(:nif_library_not_loaded)
 end

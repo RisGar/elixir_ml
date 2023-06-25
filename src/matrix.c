@@ -105,6 +105,19 @@ Matrix matrix_batch(Matrix mat, unsigned int batch_size, unsigned int batch_num)
   return res;
 }
 
+void matrix_shuffle_rows(Matrix res, Matrix mat)
+{
+  for (size_t i = OFFSET; i < MAT_ROWS(res); ++i)
+  {
+    size_t j = i + arc4random() % (MAT_ROWS(res) - i);
+    for (size_t k = OFFSET; k < MAT_COLS(res); ++k)
+    {
+      MAT_POS(res, i, k) = MAT_POS(mat, j, k);
+      MAT_POS(res, j, k) = MAT_POS(mat, i, k);
+    }
+  }
+}
+
 void matrix_dot(Matrix res, Matrix a, Matrix b)
 {
   assert(MAT_COLS(a) == MAT_ROWS(b));

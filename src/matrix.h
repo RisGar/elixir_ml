@@ -21,4 +21,5 @@ void matrix_rel(Matrix mat);
 void matrix_sum(Matrix res, Matrix a, Matrix b);
 void matrix_dot(Matrix res, Matrix a, Matrix b);
 Matrix matrix_batch(Matrix mat, unsigned int batch_size, unsigned int batch_num);
+void matrix_shuffle_rows(Matrix res, Matrix mat);
 // void matrix_row(Matrix res, Matrix mat, unsigned int row);
