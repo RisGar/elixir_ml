@@ -5,21 +5,27 @@ defmodule Mix.Tasks.Fashion do
   use Mix.Task
   import ElixirML
   alias ElixirML.MNIST
+  alias ElixirML.Layer
 
   @impl Mix.Task
   def run(_args) do
     image_size = 28 * 28
     [train_images, test_images, train_labels, test_labels] = MNIST.load()
 
+    layers = [
+      %Layer{type: :input, size: image_size},
+      %Layer{type: :linear, size: 128},
+      %Layer{type: :activation, activation: :relu},
+      %Layer{type: :linear, size: 128},
+      %Layer{type: :activation, activation: :relu},
+      %Layer{type: :linear, size: 10},
+      %Layer{type: :activation, activation: :softmax}
+    ]
+
     ElixirML.init(
-      # layer sizes
-      [image_size, 10, 10, 10],
-      # layer activations
-      [:relu, :relu, :sigmoid],
-      # optimiser
-      :adamw,
-      # loss
-      :cross_entropy
+      layers,
+      :cross_entropy,
+      :adamw
     )
     |> train(
       # input
@@ -33,5 +39,7 @@ defmodule Mix.Tasks.Fashion do
     )
     # |> feedforward()
     |> IO.inspect()
+
+    :ok
   end
 end

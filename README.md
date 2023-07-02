@@ -23,3 +23,5 @@ Then run any of the provided mix tasks:
 - mnist
 
 ## Attributions
+
+- [versilov/matrex](https://github.com/versilov/matrex): Erlang NIFs implementation incl. build system

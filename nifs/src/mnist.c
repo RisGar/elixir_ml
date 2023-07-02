@@ -34,6 +34,14 @@ void print_image(uint8_t data[IMAGE_SIZE])
   }
 }
 
+// inline uint32_t reverse_32(uint32_t value)
+// {
+//   return (((value & 0x000000FF) << 24) |
+//           ((value & 0x0000FF00) << 8) |
+//           ((value & 0x00FF0000) >> 8) |
+//           ((value & 0xFF000000) >> 24));
+// }
+
 void load_mnist_images(Images train, Images test)
 {
   // --- Training images ---
@@ -90,7 +98,7 @@ void load_mnist_labels(Labels train, Labels test)
   fread(train_data, sizeof(uint8_t), TRAIN_SIZE, train_file);
   for (size_t i = 0; i < TRAIN_SIZE; i++)
   {
-    train[i * 10 + train_data[i]] = train_data[i];
+    train[i * 10 + train_data[i]] = 1;
   }
 
   fclose(train_file);
@@ -108,7 +116,7 @@ void load_mnist_labels(Labels train, Labels test)
   fread(test_data, sizeof(uint8_t), TEST_SIZE, test_file);
   for (size_t i = 0; i < TEST_SIZE; i++)
   {
-    test[i * 10 + test_data[i]] = test_data[i];
+    test[i * 10 + test_data[i]] = 1;
   }
 
   fclose(test_file);

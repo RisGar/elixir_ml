@@ -8,7 +8,7 @@ defmodule ElixirML.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      compilers: [:elixir_make] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
 
       # Docs
       name: "ElixirML",
@@ -33,7 +33,7 @@ defmodule ElixirML.MixProject do
     [
       {:ex_doc, "~> 0.29.4", only: :dev, runtime: false},
       {:commitlint, "~> 0.1.2", only: :dev, runtime: false},
-      {:elixir_make, "~> 0.7.7", runtime: false}
+      {:rustler, "~> 0.29.1"}
     ]
   end
 

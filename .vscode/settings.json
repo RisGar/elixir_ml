@@ -20,5 +20,5 @@
     "erl_nif.h": "c"
   },
   "makefile.makefilePath": "Makefile",
-  "cmake.configureOnOpen": false
+  "rust-analyzer.linkedProjects": ["native/elixirml_nifs/Cargo.toml"]
 }

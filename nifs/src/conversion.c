@@ -1,10 +1,4 @@
-#include "erl_nif.h"
-
-// ------------------------------------------------------
-//
-// Helper functions
-//
-// ------------------------------------------------------
+#include "conversion.h"
 
 ERL_NIF_TERM matrix_to_nif(Matrix mat, ErlNifEnv *env)
 {

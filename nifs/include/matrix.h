@@ -13,6 +13,9 @@ typedef double *Matrix;
 #define TOTAL_LEN(mat) (VALS_LEN(mat) + OFFSET)
 #define TOTAL_BIN_SIZE(mat) (TOTAL_LEN(mat) * sizeof(double))
 
+#ifndef _MATRIX_H
+#define _MATRIX_H
+
 Matrix matrix_alloc(unsigned int rows, unsigned int cols);
 void matrix_fill(Matrix mat, double n);
 void matrix_random(Matrix mat);
@@ -23,3 +26,5 @@ void matrix_dot(Matrix res, Matrix a, Matrix b);
 Matrix matrix_batch(Matrix mat, unsigned int batch_size, unsigned int batch_num);
 void matrix_shuffle_rows(Matrix res, Matrix mat);
 // void matrix_row(Matrix res, Matrix mat, unsigned int row);
+
+#endif
