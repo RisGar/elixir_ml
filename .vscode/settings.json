@@ -1,24 +1,3 @@
 {
-  "files.associations": {
-    "*.mdx": "markdown",
-    "*.heex": "phoenix-heex",
-    "array": "c",
-    "vector": "c",
-    "chrono": "c",
-    "compare": "c",
-    "cstdint": "c",
-    "random": "c",
-    "span": "c",
-    "type_traits": "c",
-    "string": "c",
-    "string_view": "c",
-    "time.h": "c",
-    "assert.h": "c",
-    "stdlib.h": "c",
-    "stdio.h": "c",
-    "stdint.h": "c",
-    "erl_nif.h": "c"
-  },
-  "makefile.makefilePath": "Makefile",
   "rust-analyzer.linkedProjects": ["native/elixirml_nifs/Cargo.toml"]
 }

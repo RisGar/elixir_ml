@@ -6,7 +6,7 @@ Written in C which uses native the MacOS BLAS implementation through [vecLib](ht
 ## Requirements
 
 - MacOS with XCode Command Line Tools
-- Elixir 14.4+
+- Elixir 15+
 
 ## Installation
 
