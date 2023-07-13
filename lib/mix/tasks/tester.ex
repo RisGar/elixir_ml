@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.Tester do
   use Mix.Task
   alias ElixirML.Matrix
+  alias ElixirML.MNIST
 
   @impl Mix.Task
   def run(_args) do
@@ -37,5 +38,25 @@ defmodule Mix.Tasks.Tester do
 
     e = Matrix.shuffle(a)
     IO.inspect(e)
+
+    f =
+      [
+        train_images = %Matrix{},
+        _test_images = %Matrix{},
+        train_labels = %Matrix{},
+        _test_labels = %Matrix{}
+      ] =
+      MNIST.load()
+
+    MNIST.save(f)
+
+    n = 0
+
+    IO.inspect(train_images)
+
+    MNIST.print(
+      Enum.slice(train_images.nums, (n * 28 * 28)..((n + 1) * 28 * 28 - 1)),
+      Enum.slice(train_labels.nums, (n * 10)..((n + 1) * 10 - 1))
+    )
   end
 end

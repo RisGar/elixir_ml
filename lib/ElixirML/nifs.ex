@@ -10,4 +10,7 @@ defmodule ElixirML.NIFs do
   def mat_sum(_a, _b), do: :erlang.nif_error(:nif_not_loaded)
   def mat_prod(_a, _b), do: :erlang.nif_error(:nif_not_loaded)
   def mat_shuffle_rows(_mat), do: :erlang.nif_error(:nif_not_loaded)
+  def mat_batch(_mat, _batch_size), do: :erlang.nif_error(:nif_not_loaded)
+
+  def mnist_load(), do: :erlang.nif_error(:nif_not_loaded)
 end

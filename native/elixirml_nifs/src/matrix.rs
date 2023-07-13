@@ -5,10 +5,10 @@ use rand_distr::{Distribution, StandardNormal};
 #[derive(rustler::NifStruct, Debug)]
 #[module = "ElixirML.Matrix"]
 pub struct Matrix {
-  rows: usize,
-  cols: usize,
-  stride: usize,
-  nums: Vec<f64>,
+  pub rows: usize,
+  pub cols: usize,
+  pub stride: usize,
+  pub nums: Vec<f64>,
 }
 
 fn sigmoidf(n: f64) -> f64 {
@@ -48,10 +48,9 @@ pub fn random(rows: usize, cols: usize) -> Matrix {
   };
 
   let mut normal = StandardNormal.sample_iter(rand::thread_rng());
-  let mut i = 0;
-  while i < mat_size {
+
+  for _ in 0..mat_size {
     mat.nums.push(normal.next().unwrap());
-    i += 1;
   }
 
   mat
@@ -186,4 +185,27 @@ pub fn shuffle_rows(mut mat: Matrix) -> Matrix {
   }
 
   mat
+}
+
+pub fn batch(mat: Matrix, batch_size: usize) -> Vec<Matrix> {
+  assert!(mat.rows % batch_size == 0);
+  let batch_amount: usize = mat.rows / batch_size;
+
+  let mut res = Vec::<Matrix>::with_capacity(batch_amount);
+  for i in 0..batch_amount {
+    let mat = Matrix {
+      rows: batch_size,
+      cols: mat.cols,
+      stride: mat.cols,
+      nums: Vec::from_iter(
+        mat.nums[i * batch_size * mat.cols..(i + 1) * batch_size * mat.cols]
+          .iter()
+          .cloned(),
+      ),
+    };
+
+    res.push(mat)
+  }
+
+  res
 }
