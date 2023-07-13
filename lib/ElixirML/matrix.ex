@@ -32,6 +32,7 @@ defmodule ElixirML.Matrix do
     case act do
       :sigmoid -> NIFs.mat_sig(mat)
       :relu -> NIFs.mat_relu(mat)
+      # :softmax -> NIFs.mat_softmax(mat)
       _ -> raise "Invalid activation function"
     end
   end
@@ -46,11 +47,11 @@ defmodule ElixirML.Matrix do
   def prod(%Matrix{} = a, %Matrix{} = b),
     do: NIFs.mat_prod(a, b)
 
-  @spec shuffle(%Matrix{}) :: %Matrix{}
+  @spec shuffle(%Matrix{}, %Matrix{}) :: nonempty_list(%Matrix{})
   @doc ~S"Shuffles the first dimensiion (rows) of a matrix"
-  def shuffle(%Matrix{} = mat), do: NIFs.mat_shuffle_rows(mat)
+  def shuffle(%Matrix{} = a, %Matrix{} = b), do: NIFs.mat_shuffle_rows(a, b)
 
-  @spec batch(%Matrix{}, integer) :: [%Matrix{}]
+  @spec batch(%Matrix{}, integer) :: nonempty_list(%Matrix{})
   @doc ~S"Seperates the matrix into batches of the specified size"
   def batch(%Matrix{} = mat, batch_size) when is_integer(batch_size),
     do: NIFs.mat_batch(mat, batch_size)

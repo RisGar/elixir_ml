@@ -32,8 +32,8 @@ fn mat_prod(a: Matrix, b: Matrix) -> Matrix {
   matrix::prod(a, b)
 }
 #[rustler::nif]
-fn mat_shuffle_rows(mat: Matrix) -> Matrix {
-  matrix::shuffle_rows(mat)
+fn mat_shuffle_rows(a: Matrix, b: Matrix) -> Vec<Matrix> {
+  matrix::shuffle_rows(a, b)
 }
 #[rustler::nif]
 fn mat_batch(mat: Matrix, batch_size: usize) -> Vec<Matrix> {

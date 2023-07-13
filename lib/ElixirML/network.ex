@@ -52,8 +52,7 @@ defmodule ElixirML.Network do
     do: network
 
   defp each_epoch(network, images, labels, epochs, batch_size, i) do
-    images = Matrix.shuffle(images)
-    labels = Matrix.shuffle(labels)
+    [images, labels] = Matrix.shuffle(images, labels)
 
     batched_images = Matrix.batch(images, batch_size)
     batched_labels = Matrix.batch(labels, batch_size)

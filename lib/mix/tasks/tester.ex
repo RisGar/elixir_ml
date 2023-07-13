@@ -36,7 +36,7 @@ defmodule Mix.Tasks.Tester do
     d = Matrix.prod(a, b)
     IO.inspect(d)
 
-    e = Matrix.shuffle(a)
+    e = Matrix.shuffle(a, b)
     IO.inspect(e)
 
     f =

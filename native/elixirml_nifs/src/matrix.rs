@@ -165,10 +165,11 @@ pub fn prod(a: Matrix, b: Matrix) -> Matrix {
   mat
 }
 
-pub fn shuffle_rows(mut mat: Matrix) -> Matrix {
-  for i in 0..mat.rows {
+pub fn shuffle_rows(mut a: Matrix, mut b: Matrix) -> Vec<Matrix> {
+  assert!(a.rows == b.rows);
+  for i in 0..a.rows {
     let mut rng = rand::thread_rng();
-    let j: usize = i + rng.gen::<usize>() % (mat.rows - i);
+    let j: usize = i + rng.gen::<usize>() % (a.rows - i);
 
     // let x_i = i * mat.stride;
     // let y_i = j * mat.stride;
@@ -179,12 +180,15 @@ pub fn shuffle_rows(mut mat: Matrix) -> Matrix {
     //   std::ptr::swap(x, y);
     // }
 
-    for k in 0..mat.cols {
-      mat.nums.swap(i * mat.stride + k, j * mat.stride + k);
+    for k in 0..a.cols {
+      a.nums.swap(i * a.stride + k, j * a.stride + k);
+    }
+    for k in 0..b.cols {
+      b.nums.swap(i * b.stride + k, j * b.stride + k);
     }
   }
 
-  mat
+  vec![a, b]
 }
 
 pub fn batch(mat: Matrix, batch_size: usize) -> Vec<Matrix> {
