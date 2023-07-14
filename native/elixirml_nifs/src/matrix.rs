@@ -7,7 +7,6 @@ use rand_distr::{Distribution, StandardNormal};
 pub struct Matrix {
   pub rows: usize,
   pub cols: usize,
-  pub stride: usize,
   pub nums: Vec<f64>,
 }
 
@@ -43,7 +42,6 @@ pub fn random(rows: usize, cols: usize) -> Matrix {
   let mut mat = Matrix {
     rows,
     cols,
-    stride: cols,
     nums: Vec::<f64>::with_capacity(mat_size),
   };
 
@@ -62,7 +60,6 @@ pub fn fill(rows: usize, cols: usize, value: f64) -> Matrix {
   Matrix {
     rows,
     cols,
-    stride: cols,
     nums: vec![value; mat_size],
   }
 }
@@ -73,7 +70,6 @@ pub fn fill_vals(rows: usize, cols: usize, vals: Vec<f64>) -> Matrix {
   Matrix {
     rows,
     cols,
-    stride: cols,
     nums: vals,
   }
 }
@@ -102,7 +98,6 @@ pub fn sum(a: Matrix, b: Matrix) -> Matrix {
   let mut mat = Matrix {
     rows: a.rows,
     cols: b.cols,
-    stride: b.stride,
     nums: Vec::<f64>::with_capacity(mat_size),
   };
 
@@ -120,7 +115,6 @@ pub fn prod(a: Matrix, b: Matrix) -> Matrix {
   let mut mat = Matrix {
     rows: a.rows,
     cols: b.cols,
-    stride: b.stride,
     nums: vec![0.0; mat_size],
   };
 
@@ -153,12 +147,12 @@ pub fn prod(a: Matrix, b: Matrix) -> Matrix {
       a.cols as i32,
       1.0,
       a.nums.as_ptr() as *const c_void,
-      a.stride as i32,
+      a.cols as i32, // stride
       b.nums.as_ptr() as *const c_void,
-      b.stride as i32,
+      b.cols as i32, // stride
       0.0,
       mat.nums.as_mut_ptr() as *mut c_void,
-      mat.stride as i32,
+      mat.cols as i32, // stride
     );
   }
 
@@ -171,20 +165,11 @@ pub fn shuffle_rows(mut a: Matrix, mut b: Matrix) -> Vec<Matrix> {
     let mut rng = rand::thread_rng();
     let j: usize = i + rng.gen::<usize>() % (a.rows - i);
 
-    // let x_i = i * mat.stride;
-    // let y_i = j * mat.stride;
-    // let x = mat.nums[x_i..x_i + mat.cols].as_mut_ptr() as *mut u32;
-    // let y = mat.nums[y_i..y_i + mat.cols].as_mut_ptr() as *mut u32;
-
-    // unsafe {
-    //   std::ptr::swap(x, y);
-    // }
-
     for k in 0..a.cols {
-      a.nums.swap(i * a.stride + k, j * a.stride + k);
+      a.nums.swap(i * a.cols + k, j * a.cols + k);
     }
     for k in 0..b.cols {
-      b.nums.swap(i * b.stride + k, j * b.stride + k);
+      b.nums.swap(i * b.cols + k, j * b.cols + k);
     }
   }
 
@@ -200,7 +185,6 @@ pub fn batch(mat: Matrix, batch_size: usize) -> Vec<Matrix> {
     let mat = Matrix {
       rows: batch_size,
       cols: mat.cols,
-      stride: mat.cols,
       nums: Vec::from_iter(
         mat.nums[i * batch_size * mat.cols..(i + 1) * batch_size * mat.cols]
           .iter()

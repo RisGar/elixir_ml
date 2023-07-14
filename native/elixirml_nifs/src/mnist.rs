@@ -18,7 +18,6 @@ fn load_train_images() -> Matrix {
   let mut mat = Matrix {
     rows: TRAIN_SIZE,
     cols: IMAGE_SIZE,
-    stride: IMAGE_SIZE,
     nums: Vec::<f64>::with_capacity(mat_size),
   };
 
@@ -40,7 +39,6 @@ fn load_test_images() -> Matrix {
   let mut mat = Matrix {
     rows: TEST_SIZE,
     cols: IMAGE_SIZE,
-    stride: IMAGE_SIZE,
     nums: Vec::<f64>::with_capacity(mat_size),
   };
 
@@ -62,7 +60,6 @@ fn load_train_labels() -> Matrix {
   let mut mat = Matrix {
     rows: TRAIN_SIZE,
     cols: LABEL_SIZE,
-    stride: LABEL_SIZE,
     nums: vec![0.0; mat_size],
   };
 
@@ -85,7 +82,6 @@ fn load_test_labels() -> Matrix {
   let mut mat = Matrix {
     rows: TEST_SIZE,
     cols: LABEL_SIZE,
-    stride: LABEL_SIZE,
     nums: vec![0.0; mat_size],
   };
 

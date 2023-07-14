@@ -2,7 +2,7 @@ defmodule ElixirML.Matrix do
   alias ElixirML.NIFs
   alias ElixirML.Matrix
 
-  defstruct [:rows, :cols, :stride, :nums]
+  defstruct [:rows, :cols, :nums]
 
   @spec rand(integer | {integer, integer}) :: %Matrix{}
   @doc ~S"Generates an $(m \times n)$ or $(1 \times n)$ sized matrix filled with random numbers"
